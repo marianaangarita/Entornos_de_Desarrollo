@@ -1,25 +1,35 @@
 class Tablero():
     def __init__(self):
         self.num_casillas=3
-        self.casillas=[[" " for x in range(0, self.num_casillas)] for y in range(0, self.num_casillas)]
+        self.casillas=[["   " for x in range(0, self.num_casillas)] for y in range(0, self.num_casillas)]
 
     def imprimir_tablero(self):
-        for fila in self.casillas:
-            # Aquí estamos dentro de una fila (ej: [" ", " ", " "])
-            # ¿Cómo imprimirías los elementos de esta fila separados por un "|"?
-        
-            # Pista: Puedes usar el método .join() de Python o otro bucle for
-            print(" | ".join(fila))
-        
-            # Después de imprimir una fila, ¿qué deberíamos imprimir para separar 
-            # visualmente la fila de arriba de la de abajo?
-            print("-" * 9)
+        for fila in range(0, self.num_casillas):
+            print("|", end="")
+            for columna in range(0,self.num_casillas):
+                print(f"{self.casillas[fila][columna]}", end="|")
+            print(" ")
+            print(("-" * 13))
 
-    def espacio_libre(self, posicion):
-        # El usuario nos da un número del 0 al 8
-        # Retorna True si está vacío, False si ya tiene una X o O
-        return self.casillas[posicion] == " "
+    def poner_ficha(self, fila, columna, simbolo):
+        if self.casillas[fila][columna]=="   ":
+            self.casillas[fila][columna]=(f" {simbolo} ")
+            return self.casillas[fila][columna]
+        else:
+            return False
+
+tablero=Tablero()
+tablero.poner_ficha(0,0,"X") 
+tablero.imprimir_tablero()   
+
+
+class Juego():
+    def __init__(self):
+        self.tablero = Tablero()  # El juego "tiene" un tablero
+        self.turno = "X"          # Empezamos siempre con las X
     
+    
+'''
     def marcar_casilla(self, posicion, ficha):
         # Solo marcamos si el espacio está libre
         if self.espacio_libre(posicion):
@@ -28,10 +38,7 @@ class Tablero():
         return False
 
 
-class Juego():
-    def __init__(self):
-        self.tablero = Tablero()  # El juego "tiene" un tablero
-        self.turno = "X"          # Empezamos siempre con las X
+
         
     def cambiar_turno(self):
         # Si el turno actual es X, pasa a ser O, y viceversa
@@ -102,3 +109,4 @@ class Juego():
 
 mi_juego = Juego()
 mi_juego.jugar()
+'''
