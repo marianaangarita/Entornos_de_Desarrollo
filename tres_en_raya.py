@@ -26,41 +26,53 @@ tablero.imprimir_tablero()
 class Juego():
     def __init__(self):
         self.tablero = Tablero()  # El juego "tiene" un tablero
-        self.turno = "X"          # Empezamos siempre con las X
+        self.turno =" X "          # Empezamos siempre con las X
     
     def cambiar_turno(self):
         # Si el turno actual es X, pasa a ser O, y viceversa
-        if self.turno == "X":
-            self.turno = "O"
+        if self.turno ==" X ":
+            self.turno =" O "
         else:
-            self.turno = "X"
-    
+            self.turno =" X "
+
     def hay_ganador(self):
-        
 
-    def hay_ganador_horizontal(self):
-        for fila in range(0, self.tablero.num_casillas):
-            if self.tablero.casillas[fila][0]==self.tablero.casillas[fila][1]==self.tablero.casillas[fila][2] and self.tablero.casillas[fila][0]!="   ":
+        if self.hay_ganador_horizontal() or self.hay_ganador_diagonal() or self.hay_ganador_vertical():
+
                 return True
-        return False
-    
+
+        return False  
+     
     def hay_ganador_vertical(self):
+        ganador_columna=False
         for columna in range(0, self.tablero.num_casillas):
-            if self.tablero.casillas[0][columna]==self.tablero.casillas[1][columna]==self.tablero.casillas[2][columna] and self.tablero.casillas[1][columna]!="   ":
-                return True
+            if self.tablero.casillas[0][columna]!="   ":
+                simbolo=self.tablero.casillas[0][columna]
+                ganador_columna=True
+                for fila in range(0, self.tablero.num_casillas):
+                    if self.tablero.casillas[fila][columna]!= simbolo: 
+                        ganador_columna=False
+                if ganador_columna==True:
+                    return ganador_columna
         return False
     
-    def hay_ganador_diagonal(self):
-        if self.tablero.casillas[0][0]==self.tablero.casillas[1][1]==self.tablero.casillas[2][2] and self.tablero.casillas[1][1]!="   ":
-                return True
-        if self.tablero.casillas[0][2]==self.tablero.casillas[1][1]==self.tablero.casillas[2][0] and self.tablero.casillas[1][1]!="   ":
-                return True
+    def hay_ganador_horizontal(self):
+        ganador_fila=False
+        for fila in range(0, self.tablero.num_casillas):
+            if self.tablero.casillas[fila][0]!="   ":
+                simbolo=self.tablero.casillas[fila][0]
+                ganador_fila=True
+                for columna in range(0, self.tablero.num_casillas):
+                    if self.tablero.casillas[fila][columna]!= simbolo: 
+                        ganador_fila=False
+                if ganador_fila==True:
+                    return ganador_fila
         return False
-
+    
 
     def jugar(self):
         
-        while "   " in self.tablero.casillas and not.tablero.hay_ganador():
+        while "   " in self.tablero.casillas and not self.tablero.hay_ganador():
             self.tablero.imprimir_tablero()
 
             fila=int(input("Indica la fila: "))
