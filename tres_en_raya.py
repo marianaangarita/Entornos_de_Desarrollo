@@ -69,6 +69,7 @@ class Juego():
                     return ganador_fila
         return False
     
+    def hay_ganador_diagonal(self):
 
     def jugar(self):
         
