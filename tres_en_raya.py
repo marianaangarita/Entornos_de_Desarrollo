@@ -12,11 +12,14 @@ class Tablero():
             print(("-" * 13))
 
     def poner_ficha(self, fila, columna, simbolo):
-        if self.casillas[fila][columna]=="   ":
-            self.casillas[fila][columna]=(f" {simbolo} ")
-            return True
-        else:
-            return False
+        if fila>=0 and fila<self.num_casillas and columna>=0 and columna<self.num_casillas:
+            if self.casillas[fila][columna]=="   ":
+                self.casillas[fila][columna]=(f" {simbolo} ")
+                return True
+            else:
+                return False
+        return False
+
     def hay_casillas_vacias(self):
         for fila in range (0,self.num_casillas):
             for columna in range (0,self.num_casillas):
