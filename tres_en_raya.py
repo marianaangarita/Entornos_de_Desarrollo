@@ -87,21 +87,26 @@ class Juego():
     
     def hay_ganador(self):
         return self.hay_ganador_horizontal() or self.hay_ganador_diagonal_derecha() or self.hay_ganador_vertical() or self.hay_ganador_diagonal_izquierda()
+    
+    def hay_casillas_vacias(self):
+        for fila in range (0,self.tablero.num_casillas):
+            for columna in range (0,self.tablero.num_casillas):
+                if self.tablero.casillas[fila][columna]=="   ":
+                    return True
+        return False
 
     def jugar(self):
         
-        while "   " in self.tablero.casillas and not self.tablero.hay_ganador():
-            self.tablero.imprimir_tablero()
+        while self.hay_casillas_vacias() and not self.hay_ganador():
 
+            self.tablero.imprimir_tablero()
             fila=int(input("Indica la fila: "))
             columna=int(input("Indica la columna: "))
             self.tablero.poner_ficha(fila,columna, self.turno)
-
             self.cambiar_turno()
 
 '''
     
-    def hay_ganador(self):
     
     def jugar(self):
         while not self.tablero.hay_ganador() and " " in self.tablero.casillas:
