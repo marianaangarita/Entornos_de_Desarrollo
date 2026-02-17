@@ -27,11 +27,6 @@ class Tablero():
                     return True
         return False
 
-tablero=Tablero()
-tablero.poner_ficha(0,0,"X") 
-tablero.imprimir_tablero()   
-
-
 class Juego():
     def __init__(self):
         self.tablero = Tablero()  # El juego "tiene" un tablero
