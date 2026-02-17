@@ -38,7 +38,6 @@ class Juego():
     def hay_ganador(self):
 
         if self.hay_ganador_horizontal() or self.hay_ganador_diagonal() or self.hay_ganador_vertical():
-
                 return True
 
         return False  
