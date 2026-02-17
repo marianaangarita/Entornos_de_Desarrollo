@@ -86,10 +86,7 @@ class Juego():
         return False
     
     def hay_ganador(self):
-        if self.hay_ganador_horizontal() or self.hay_ganador_diagonal_derecha() or self.hay_ganador_vertical() or self.hay_ganador_diagonal_izquierda():
-            return True
-        else:
-            return False  
+        return self.hay_ganador_horizontal() or self.hay_ganador_diagonal_derecha() or self.hay_ganador_vertical() or self.hay_ganador_diagonal_izquierda()
 
     def jugar(self):
         
