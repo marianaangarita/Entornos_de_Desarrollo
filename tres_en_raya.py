@@ -34,13 +34,6 @@ class Juego():
             self.turno =" O "
         else:
             self.turno =" X "
-
-    def hay_ganador(self):
-
-        if self.hay_ganador_horizontal() or self.hay_ganador_diagonal() or self.hay_ganador_vertical():
-                return True
-
-        return False  
      
     def hay_ganador_vertical(self):
         ganador_columna=False
@@ -68,7 +61,35 @@ class Juego():
                     return ganador_fila
         return False
     
-    def hay_ganador_diagonal(self):
+    def hay_ganador_diagonal_derecha(self):
+        ganador_diagonal_dere=False
+        if self.tablero.casillas[0][0]!="   ":
+            simbolo=self.tablero.casillas[0][0]
+            ganador_diagonal_dere=True
+            for diagonal in range(0, self.tablero.num_casillas):
+                if self.tablero.casillas[diagonal][diagonal]!= simbolo: 
+                    ganador_diagonal_dere=False
+            if ganador_diagonal_dere==True:
+                return ganador_diagonal_dere
+        return False
+    
+    def hay_ganador_diagonal_izquierda(self):
+        ganador_diagonal_izq=False
+        if self.tablero.casillas[0][self.tablero.num_casillas-1]!="   ":
+            simbolo=self.tablero.casillas[0][self.tablero.num_casillas-1]
+            ganador_diagonal_izq=True
+            for fila in range(0, self.tablero.num_casillas):
+                if self.tablero.casillas[fila][self.tablero.num_casillas-1-fila]!= simbolo: 
+                    ganador_diagonal_izq=False
+            if ganador_diagonal_izq==True:
+                return ganador_diagonal_izq
+        return False
+    
+    def hay_ganador(self):
+        if self.hay_ganador_horizontal() or self.hay_ganador_diagonal_derecha() or self.hay_ganador_vertical() or self.hay_ganador_diagonal_izquierda():
+            return True
+        else:
+            return False  
 
     def jugar(self):
         
