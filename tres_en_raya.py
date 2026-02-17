@@ -17,6 +17,12 @@ class Tablero():
             return True
         else:
             return False
+    def hay_casillas_vacias(self):
+        for fila in range (0,self.num_casillas):
+            for columna in range (0,self.num_casillas):
+                if self.casillas[fila][columna]=="   ":
+                    return True
+        return False
 
 tablero=Tablero()
 tablero.poner_ficha(0,0,"X") 
@@ -88,23 +94,26 @@ class Juego():
     def hay_ganador(self):
         return self.hay_ganador_horizontal() or self.hay_ganador_diagonal_derecha() or self.hay_ganador_vertical() or self.hay_ganador_diagonal_izquierda()
     
-    def hay_casillas_vacias(self):
-        for fila in range (0,self.tablero.num_casillas):
-            for columna in range (0,self.tablero.num_casillas):
-                if self.tablero.casillas[fila][columna]=="   ":
-                    return True
-        return False
 
     def jugar(self):
-        
-        while self.hay_casillas_vacias() and not self.hay_ganador():
+        while self.tablero.hay_casillas_vacias() and not self.hay_ganador():
 
             self.tablero.imprimir_tablero()
+            print(f"Turno del jugador {self.turno}")
             fila=int(input("Indica la fila: "))
             columna=int(input("Indica la columna: "))
             self.tablero.poner_ficha(fila,columna, self.turno)
-            self.cambiar_turno()
+            
+            if self.hay_ganador():
+                self.tablero.imprimir_tablero()
+                print(f"¡Felicidades! El jugador {self.turno} ha ganado!!!!")
+                break
 
+            if not self.tablero.hay_casillas_vacias():
+                self.tablero.imprimir_tablero()
+                print("¡Es un empate!")
+                break
+            self.cambiar_turno()
 '''
     
     
