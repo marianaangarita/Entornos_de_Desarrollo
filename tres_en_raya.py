@@ -94,39 +94,48 @@ class Juego():
         self.tablero = Tablero()  # El juego "tiene" un tablero
         self.turno ="X"          # Empezamos siempre con las X
     
+    def get_turno(self):
+        return self.turno
+    def set_turno(self, t):
+        self.turno=t
+    
     def cambiar_turno(self):
         # Si el turno actual es X, pasa a ser O, y viceversa
-        if self.turno =="X":
-            self.turno ="O"
+        if self.get_turno() =="X":
+            self.set_turno("O")
         else:
-            self.turno ="X"
+            self.set_turno("X")
      
 
     def jugar(self):
         while self.tablero.hay_casillas_vacias() and not self.tablero.hay_ganador():
 
             self.tablero.imprimir_tablero()
-            print(f"Turno del jugador {self.turno}")
+            print(f"Turno del jugador {self.get_turno()}")
             try:
                 fila=int(input("Indica la fila: "))
                 columna=int(input("Indica la columna: "))
 
             except ValueError:
                 print(f"Error! tienes que poner un número entre 0 y {self.tablero.get_num_casillas()-1} ")
-                continue 
+                continue # se reinicia el bucle 
             
-            self.tablero.poner_ficha(fila,columna, self.turno)
+            ficha_colocada=self.tablero.poner_ficha(fila,columna, self.get_turno())
             
-            if self.tablero.hay_ganador():
-                self.tablero.imprimir_tablero()
-                print(f"¡Felicidades! El jugador {self.turno} ha ganado!!!!")
-                break
+            if ficha_colocada==True:
+                if self.tablero.hay_ganador():
+                    self.tablero.imprimir_tablero()
+                    print(f"¡Felicidades! El jugador {self.get_turno()} ha ganado!!!!")
+                    break
 
-            if not self.tablero.hay_casillas_vacias():
-                self.tablero.imprimir_tablero()
-                print("¡Es un empate!")
-                break
-            self.cambiar_turno()
+                if not self.tablero.hay_casillas_vacias():
+                    self.tablero.imprimir_tablero()
+                    print("¡Es un empate!")
+                    break
+            
+                self.cambiar_turno()
+            else:
+                continue
 
 juego=Juego()
 juego.jugar()
