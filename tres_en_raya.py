@@ -121,8 +121,8 @@ class Juego():
                 continue # se reinicia el bucle 
             
             ficha_colocada=self.tablero.poner_ficha(fila,columna, self.get_turno())
-            
-            if ficha_colocada==True:
+
+            if ficha_colocada:
                 if self.tablero.hay_ganador():
                     self.tablero.imprimir_tablero()
                     print(f"¡Felicidades! El jugador {self.get_turno()} ha ganado!!!!")
