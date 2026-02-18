@@ -107,14 +107,15 @@ class Juego():
 
             self.tablero.imprimir_tablero()
             print(f"Turno del jugador {self.turno}")
-            fila=input("Indica la fila: ")
-            columna=input("Indica la columna: ")
-            if fila==""or columna=="":
+            try:
+                fila=int(input("Indica la fila: "))
+                columna=int(input("Indica la columna: "))
+
+            except ValueError:
                 print(f"Error! tienes que poner un número entre 0 y {self.tablero.get_num_casillas()-1} ")
-            else:
-                fila_num=int(fila)
-                columna_num=int(columna)
-                self.tablero.poner_ficha(fila_num,columna_num, self.turno)
+                continue 
+            
+            self.tablero.poner_ficha(fila,columna, self.turno)
             
             if self.tablero.hay_ganador():
                 self.tablero.imprimir_tablero()
