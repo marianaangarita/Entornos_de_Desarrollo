@@ -54,8 +54,6 @@ lista_palabras = [
     "zanahoria", "zapato", "zorro"
 ]
 
-# Verificación rápida (opcional)
-print(f"Total de palabras: {len(lista_palabras)}")
 
 diccionario={}
 
@@ -63,10 +61,9 @@ for letra in abecedario:
     diccionario[letra]=[]
 
 
-for clave, valor in diccionario.items():
-    for letra in lista_palabras:
-        if clave==letra[0]:
-            valor.append(letra)
+
+for palabra in lista_palabras:
+    diccionario[palabra[0]].append(palabra)
 
 print(diccionario)
 
