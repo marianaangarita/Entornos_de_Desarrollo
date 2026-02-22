@@ -1,7 +1,7 @@
 abecedario=["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
 lista_palabras = [
     # A
-    "abeja", "árbol", "avión",
+    "abeja", "arbol", "avión",
     # B
     "balón", "barco", "bota",
     # C
@@ -56,11 +56,17 @@ lista_palabras = [
 
 # Verificación rápida (opcional)
 print(f"Total de palabras: {len(lista_palabras)}")
-print(lista_palabras)
+
 diccionario={}
 
 for letra in abecedario:
     diccionario[letra]=[]
+
+
+for clave, valor in diccionario.items():
+    for letra in lista_palabras:
+        if clave==letra[0]:
+            valor.append(letra)
 
 print(diccionario)
 
