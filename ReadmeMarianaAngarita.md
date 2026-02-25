@@ -7,7 +7,7 @@
 3. [Actividad 2 – Juego de Tres en Raya](#actividad-2--juego-de-tres-en-raya)
 4. [Actividad 3 – Diccionario con HashMap](#actividad-3--diccionario-con-hashmap)
 5. [Actividad 4 – Ficheros de Registro (.log)](#actividad-4--ficheros-de-registro-log)
-6. [Conclusión](#Conclusion)
+6. [Conclusión](#conclusión)
 ---
 
 ## Introducción General
@@ -262,6 +262,6 @@ El mayor reto ha sido entender la serialización. Inicialmente no quedaba claro 
 
 Esta práctica ha supuesto un paso decisivo en la transición de la programación más flexible de Python hacia el rigor de la Programación Orientada a Objetos (POO) en Java. A lo largo de las actividades, se ha interiorizado la necesidad de estructurar el código de manera formal, aplicando principios fundamentales como la encapsulación y la responsabilidad única. El proceso ha demostrado que Java, aunque más estricto en su sintaxis, exige pensar y diseñar antes de programar, separando claramente la lógica interna de las interfaces y creando clases que gestionen su propio estado de forma independiente.
 
-Más allá del aprendizaje técnico —como el uso eficiente de estructuras clave-valor (HashMap) o la persistencia de datos mediante serialización—, el mayor avance ha sido metodológico. La gestión proactiva de excepciones (try-catch) ha reforzado la importancia de anticiparse a los errores del entorno y del usuario. En definitiva, la práctica ha consolidado la mentalidad de que no basta con lograr que el código funcione; el verdadero objetivo es desarrollar software estructurado, escalable y mantenible, marcando la diferencia entre un simple script académico y un proyecto de desarrollo profesional.
+Más allá del aprendizaje técnico (como el uso eficiente de estructuras clave-valor (HashMap) o la persistencia de datos mediante serialización), el mayor avance ha sido metodológico. La gestión proactiva de excepciones (try-catch) ha reforzado la importancia de anticiparse a los errores del entorno y del usuario. En definitiva, la práctica ha consolidado la mentalidad de que no basta con lograr que el código funcione; el verdadero objetivo es desarrollar software estructurado, escalable y mantenible, marcando la diferencia entre un simple script académico y un proyecto de desarrollo profesional.
 
 
