@@ -7,7 +7,7 @@
 3. [Actividad 2 – Juego de Tres en Raya](#actividad-2--juego-de-tres-en-raya)
 4. [Actividad 3 – Diccionario con HashMap](#actividad-3--diccionario-con-hashmap)
 5. [Actividad 4 – Ficheros de Registro (.log)](#actividad-4--ficheros-de-registro-log)
-6. [Conclusión](#Conclusión)
+6. [Conclusión](#Conclusion)
 ---
 
 ## Introducción General
