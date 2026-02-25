@@ -258,7 +258,7 @@ El mayor reto ha sido entender la serialización. Inicialmente no quedaba claro 
 
 ---
 
-## 6.Conclusión Final
+## Conclusión Final
 
 Esta práctica ha supuesto un paso decisivo en la transición de la programación más flexible de Python hacia el rigor de la Programación Orientada a Objetos (POO) en Java. A lo largo de las actividades, se ha interiorizado la necesidad de estructurar el código de manera formal, aplicando principios fundamentales como la encapsulación y la responsabilidad única. El proceso ha demostrado que Java, aunque más estricto en su sintaxis, exige pensar y diseñar antes de programar, separando claramente la lógica interna de las interfaces y creando clases que gestionen su propio estado de forma independiente.
 
