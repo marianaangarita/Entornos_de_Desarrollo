@@ -81,9 +81,21 @@ def hay_ganador_horizontal(self):
             if ganador_fila:
                 return ganador_fila
     return False
+# Planteamiento inicial en Python – comprobación diagonal 
+def hay_ganador_diagonal_derecha(self):
+    ganador_diagonal_dere=False
+    if self.tablero.casillas[0][0]!="   ":
+        simbolo=self.tablero.casillas[0][0]
+        ganador_diagonal_dere=True
+        for diagonal in range(0, self.tablero.num_casillas):
+            if self.tablero.casillas[diagonal][diagonal]!= simbolo: 
+                ganador_diagonal_dere=False
+        if ganador_diagonal_dere==True:
+            return ganador_diagonal_dere
+    return False
 ```
 
-De forma análoga se implementaron los métodos `hay_ganador_vertical()`, `hay_ganador_diagonal_derecha()` y `hay_ganador_diagonal_izquierda()`, siguiendo el mismo patrón escalable.
+De forma análoga se implementaron los métodos `hay_ganador_vertical()`, y `hay_ganador_diagonal_izquierda()`, siguiendo el mismo patrón escalable.
 
 ### 2. Encapsulación y Principio de Responsabilidad Única
 
