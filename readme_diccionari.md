@@ -23,41 +23,85 @@ A continuación, se detalla el funcionamiento del script línea por línea:
 * **`boolean isPalindrome=palabraIzquierda.equals(palabraDerecha);`**: En Java, los *Strings* no se comparan con `==`, sino con el método `.equals()`. Esta línea compara ambas variables y guarda `true` si son exactamente iguales o `false` si no lo son.
 * **`if(isPalindrome) { ... } else { ... }`**: Por último, utilizamos un bloque condicional `if-else` para evaluar el resultado y mostrar por pantalla si la palabra introducida es un palíndromo o no.
 
-Diccionario
 
-este ejercicio de diciionario ha sido relativamente facil de ejecutar primero cre una lista con letras del abecedario, 
-luego cree el dicionario y con un bucle for hice que cada clave fuera una letra del dicionario.
+# Documentación: Actividad 3 - Diccionario con HashMap
 
-python
-    for letra in abecedario:
-    diccionario[letra]=[]
+## 1. Introducción
 
-luego cree otra lista con palabras que empezaran con cada letra del abecedario, y cree un segundo bucle for donde se si la clave del diccionario coincidia con la posicion[0] de la palabra de la lista (su inicial) hiciera un append con el valor del diccionario.
+En esta actividad, el objetivo ha sido crear un diccionario utilizando la estructura de datos `HashMap` de Java. La finalidad de este diccionario es almacenar las letras del alfabeto como claves, asociando a cada una de ellas una lista de palabras que comiencen por dicha letra.
+
+Para abordar este reto, decidí plantear y resolver primero la lógica algorítmica en Python (lenguaje con el que me siento más familiarizado de evaluaciones anteriores) y, una vez optimizada, realizar la traducción al paradigma y sintaxis estricta de Java.
+
+## 2. Proceso de Desarrollo y Evolución de la Lógica
+
+El desarrollo de este ejercicio ha sido un proceso iterativo donde la lógica ha ido evolucionando para hacerse más eficiente.
+
+### Fase 1: El planteamiento inicial 
+
+Inicialmente, creé una lista con las letras del abecedario y preparé el diccionario asignando a cada letra una lista vacía. Luego, para rellenarlo, planteé una solución basada en bucles anidados: iterar sobre cada clave del diccionario y, por cada clave, iterar sobre toda la lista de palabras para comprobar si la inicial coincidía.
+
+```python
+# Planteamiento inicial en Python
+for letra in abecedario:
+    diccionario[letra] = []
 
 for clave, valor in diccionario.items():
-    for letra in lista_palabras:
-        if clave==letra[0]:
-            valor.append(letra)
+    for palabra in lista_palabras:
+        if clave == palabra[0]: # Condicional para buscar la coincidencia
+            valor.append(palabra)
 
 print(diccionario)
 
-asi es como hice el diccionario en python y luego lo pasé a java con HasMap.
+```
 
-despues de darle un par de vueltas he simplificado la lógica del diccionario de la siguiente manera, (vi que el condicional es totalmente innecesario)
+### Fase 2: Optimización de la lógica
 
-resultado final python:
+Al revisar el código, me di cuenta de que el doble bucle `for` y el condicional `if` eran totalmente innecesarios y hacían el código ineficiente. Si ya conozco la palabra, su primera letra (`palabra[0]`) es directamente la clave del diccionario donde debo guardarla.
 
-diccionario={}
+Simplifiqué la lógica eliminando el bucle exterior y el condicional, accediendo directamente a la lista correspondiente:
+
+```python
+# Planteamiento final optimizado en Python
+diccionario = {}
 
 for letra in abecedario:
-    diccionario[letra]=[]
-
-
+    diccionario[letra] = []
 
 for palabra in lista_palabras:
+    # Accedemos directamente a la clave usando la inicial de la palabra
     diccionario[palabra[0]].append(palabra)
 
 print(diccionario)
+
+```
+
+### Fase 3: Traducción a Java
+
+Con la lógica clara y optimizada, el último paso fue migrar este comportamiento a Java haciendo uso de la interfaz `Map`, la clase `HashMap` y las colecciones `ArrayList`.
+
+## 3. Funcionamiento de la Estructura de Datos (HashMap)
+
+A diferencia de los arrays tradicionales que se indexan mediante números (0, 1, 2...), un `HashMap` es una estructura de datos basada en el concepto de **Clave-Valor (Key-Value)**.
+
+En nuestra implementación en Java, la estructura se ha definido de la siguiente manera:
+`Map<Character, List<String>> diccionario = new HashMap<>();`
+
+El funcionamiento paso a paso de esta estructura en el código es el siguiente:
+
+1. **Definición de Tipos:** Forzamos a que las **Claves (Keys)** sean estrictamente caracteres (`Character`, por ejemplo: 'a', 'b', 'c') y que los **Valores (Values)** sean listas de cadenas de texto (`List<String>`).
+2. **Inicialización de las Claves:** Recorremos un array con el abecedario. Por cada letra, usamos el método `.put(letra, new ArrayList<>())`. Esto crea las 26 "cajas" (claves) en nuestro `HashMap` y dentro de cada caja mete una lista vacía, lista para recibir palabras.
+3. **Poblado de datos (Acceso directo):** * Recorremos nuestra lista de palabras.
+* Extraemos la inicial de la palabra evaluada con `palabra.charAt(0)`.
+* En lugar de buscar iterativamente, le preguntamos directamente al diccionario si existe esa clave usando `.containsKey()`. Esto añade una capa de robustez al código de Java para evitar errores si la palabra empieza por un símbolo no registrado.
+
+
+* Si la clave existe, recuperamos la lista asociada a esa letra con `.get(primeraLetra)` y, sobre esa misma lista devuelta, ejecutamos el `.add(palabra)`.
+
+
+
+Este enfoque garantiza un rendimiento óptimo, ya que los diccionarios (Tablas Hash) están diseñados para recuperar información casi instantáneamente sin necesidad de recorrer todos sus elementos.
+
+
 
 Documentación: Actividad 4 - Ficheros de Registro (.log)
 1. Introducción
