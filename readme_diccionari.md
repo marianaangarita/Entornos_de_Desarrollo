@@ -1,3 +1,30 @@
+
+# Documentación: Actividad 1 - Detector de Palíndromos
+
+## 1. Introducción
+
+En este primer módulo de la práctica, se ha implementado un detector de palíndromos. El objetivo de este programa es leer una cadena de texto introducida por el usuario y determinar si se lee igual de izquierda a derecha que de derecha a izquierda.
+
+La base de este ejercicio la realizamos durante una práctica en clase, y me ha servido como punto de partida para asimilar la sintaxis básica de Java, el uso de la clase `Scanner` para la entrada de datos por teclado, y el manejo de objetos de tipo `String`, adaptando la lógica de bucles que ya conocíamos de Python al nuevo lenguaje.
+
+## 2. Explicación del código paso a paso
+
+A continuación, se detalla el funcionamiento del script línea por línea:
+
+* **`import java.util.Scanner;`**: Importamos la clase `Scanner` de la biblioteca estándar de Java, que es necesaria para poder leer lo que el usuario escribe por consola.
+* **`Scanner sc= new Scanner(System.in);`**: Instanciamos el objeto `Scanner` y le indicamos que lea desde la entrada estándar del sistema (`System.in`, que es el teclado).
+* **`System.out.println("Introduce la palabra: ");`**: Imprimimos un mensaje en la consola para pedirle al usuario que introduzca el texto.
+* **`String palabra=sc.nextLine();`**: Guardamos la frase o palabra que el usuario ha escrito en la variable `palabra`.
+* **`String palabraIzquierda="";`**: Creamos una variable de texto vacía. Esta variable servirá para almacenar la palabra leída de izquierda a derecha.
+* **`for(char c : palabra.toCharArray()) { palabraIzquierda+=c; }`**: Utilizamos un bucle *for-each*. Como en Java no podemos iterar directamente sobre un `String`, usamos `.toCharArray()` para convertir la palabra en un *array* de caracteres. En cada vuelta, añadimos la letra a `palabraIzquierda`.
+* **`String palabraDerecha="";`**: Creamos otra variable de texto vacía que almacenará la palabra invertida.
+* **`for (int i=palabra.length()-1;i>=0;i--) { ... }`**: Iniciamos un bucle `for` clásico que cuenta hacia atrás. Empieza en la última posición de la palabra (`palabra.length()-1`) y termina cuando llega a 0 (la primera letra).
+* **`palabraDerecha+=palabra.charAt(i);`**: Dentro del bucle anterior, usamos `.charAt(i)` para extraer la letra en la posición exacta `i` y la vamos sumando a `palabraDerecha`, dándole así la vuelta completa a la palabra original.
+* **`boolean isPalindrome=palabraIzquierda.equals(palabraDerecha);`**: En Java, los *Strings* no se comparan con `==`, sino con el método `.equals()`. Esta línea compara ambas variables y guarda `true` si son exactamente iguales o `false` si no lo son.
+* **`if(isPalindrome) { ... } else { ... }`**: Por último, utilizamos un bloque condicional `if-else` para evaluar el resultado y mostrar por pantalla si la palabra introducida es un palíndromo o no.
+
+Diccionario
+
 este ejercicio de diciionario ha sido relativamente facil de ejecutar primero cre una lista con letras del abecedario, 
 luego cree el dicionario y con un bucle for hice que cada clave fuera una letra del dicionario.
 
