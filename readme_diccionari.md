@@ -32,33 +32,29 @@ for palabra in lista_palabras:
 
 print(diccionario)
 
-Memoria de Desarrollo: Actividad 4 - Ficheros de Registro
-1. El reto inicial: De Python a Java
-El objetivo principal de este módulo era construir un sistema capaz de registrar eventos del programa en dos formatos de fichero distintos. Al venir de programar en Python, el primer desafío fue adaptarme al tipado estricto de Java y a la gestión obligatoria de errores. Tuve que familiarizarme con el bloque try-catch para capturar las IOException que Java exige al manejar flujos de entrada y salida.
+Documentación: Actividad 4 - Ficheros de Registro (.log)1. 
+Introducción
+Esta documentación detalla la solución desarrollada para la Actividad 4 de la práctica de Programación. El objetivo principal de este módulo es la generación y lectura de ficheros de registro utilizando Java.Para lograr la máxima puntuación en este apartado (30%), se han implementado ambas modalidades requeridas por el enunciado : la versión en texto plano (.txt) y la versión serializada (.ser).
 
-2. Primera fase: El formato de texto plano (.txt)
-Empecé desarrollando la modalidad básica en texto legible.
+Esta práctica ha sido fundamental para entender cómo Java maneja los flujos de entrada y salida (I/O) y cómo aplicar la persistencia de datos, un paso importante en nuestra adaptación desde Python hacia la programación orientada a objetos en Java.2. 
 
-Inicialmente utilicé FileWriter y BufferedWriter, pero me encontré con el problema de que el fichero se sobrescribía en cada ejecución.
+Modalidad 1: Ficheros de texto plano (.txt)
+Este primer script se encarga de guardar información de forma legible para el usuario.
+¿Qué hace?: Crea un archivo llamado prueba.txt, escribe una cadena de texto en él ("Esto es una prueba de fichero txt en java") y, posteriormente, lee el archivo línea por línea para mostrar su contenido por consola.
+¿Cómo lo hace?:Para la escritura, utilizamos las clases FileWriter y BufferedWriter. El BufferedWriter es crucial porque optimiza las operaciones de escritura en disco.Para la lectura, usamos FileReader junto con BufferedReader. Mediante un bucle while, leemos el archivo usando el método readLine() hasta que nos devuelve null, lo que indica el final del documento.
+Gestión de errores: Todo el bloque está envuelto en un try-catch para capturar la excepción IOException, garantizando que el programa no se cierre de forma abrupta si hay problemas de permisos o si el archivo no se encuentra.3. 
 
-Para solucionar esto y que funcionara como un log real, añadí el parámetro true en la instanciación del FileWriter, activando así el modo de adición (append).
+Modalidad 2: Ficheros serializados (.ser)
 
-Para la lectura del historial, implementé un FileReader envuelto en un BufferedReader, lo que me permitió recorrer el archivo cómodamente línea a línea mediante un bucle while.
+Este segundo script implementa la persistencia de datos mediante la serialización de objetos, lo que permite guardar el estado exacto de un objeto de Java en memoria hacia un archivo físico.
 
-3. Segunda fase: La persistencia binaria (.ser)
-Esta fue la parte más técnica del desarrollo. El requisito era generar una versión serializada utilizando ObjectInputStream y ObjectOutputStream.
+¿Qué hace?: 
+Instancia un objeto de una clase personalizada llamada Registro, lo convierte en una secuencia de bytes para guardarlo en prueba.ser y luego realiza el proceso inverso (deserialización) para recuperarlo y leer su contenido.
 
-Pronto descubrí que los archivos binarios serializados no soportan la adición directa de datos al final del fichero como los .txt, ya que esto corrompe las cabeceras de los objetos.
-
-La ruta lógica que seguí para resolverlo fue apoyarme en la estructura de datos ArrayList.
-
-El algoritmo final primero lee el archivo .ser si existe y carga los logs previos en la lista, luego añade el nuevo evento a la colección en memoria, y por último sobrescribe el archivo guardando el objeto de la lista actualizado por completo.
-
-4. Unificación para la versión final
-Para optar al 30% de la calificación de este bloque, necesitaba que el sistema integrara ambas modalidades a la perfección.
-
-En lugar de tener scripts separados, diseñé una clase unificada con un método principal registrarEvento().
-
-Este método centraliza la lógica y se encarga de escribir en ambos ficheros simultáneamente.
-
-Esta decisión de diseño garantiza un código modular, limpio y organizado, cumpliendo con los criterios transversales de legibilidad y buenas prácticas del proyecto.
+¿Cómo lo hace?:
+Interfaz Serializable:
+ El paso más importante ha sido asegurar que la clase Registro implemente la interfaz Serializable para que Java permita su conversión.
+ Escritura: Utilizamos FileOutputStream combinado con ObjectOutputStream. El método writeObject() es el encargado de volcar el objeto entero al fichero.Lectura: Empleamos FileInputStream y ObjectInputStream. Con el método readObject() recuperamos los bytes y los transformamos ("casteamos") de nuevo a un objeto de tipo Registro.Gestión de errores: Además de IOException, aquí es obligatorio capturar ClassNotFoundException al leer el archivo, por si el programa intenta cargar un objeto cuya clase ya no existe en el proyecto.4. 
+ 
+ Proceso de aprendizaje (Cómo he llegado hasta aquí)
+ Venir de Python hace que la gestión de ficheros en Java parezca mucho más verbosa al principio. En Python bastaba con un simple open(), mientras que en Java he tenido que comprender el concepto de los "flujos" (Streams) y cómo se "envuelven" unos objetos dentro de otros (como meter un FileReader dentro de un BufferedReader).El mayor reto ha sido entender el concepto de la serialización. Al principio no comprendía por qué daba error al intentar guardar mi objeto, hasta que asimilé la importancia de la interfaz Serializable y la necesidad de usar ObjectInputStream y ObjectOutputStream tal y como pedía el enunciado. Finalmente, comprender la obligación de cerrar siempre los flujos (.close()) en los bloques try-catch me ha ayudado a crear un código mucho más seguro y robusto
