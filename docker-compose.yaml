@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  DoD:
+    build: .
+    image: it-crm:v0.1
+    container_name: DoD
+    ports:
+      - "3000:3000"
+    networks:
+      - DoD-CRM-NETWORK
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: DoD_CRM_DATABASE_25
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - DoD-CRM-NETWORK
+
+networks:
+  DoD-CRM-NETWORK:
+    driver: bridge
+
+volumes:
+  mongodb_data:
