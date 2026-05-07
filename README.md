@@ -88,12 +88,15 @@ Debemos modificar las instrucciones de construcción del contenedor para que use
 FROM python:3.9-alpine
 WORKDIR /app
 COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+RUN apk add --no-cache postgresql-libs && \
+    apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && \
+    pip install --no-cache-dir -r requirements.txt && \
+    apk --purge del .build-deps
 COPY . .
 EXPOSE 5000
 CMD ["python", "app.py"]
 ```
-- **El Porqué**: El entorno de ejecución cambia. Necesitamos una imagen base de Python (`python:3.9-alpine`). El comando para instalar librerías pasa a ser `pip install`. Por último, Flask expone tradicionalmente el puerto `5000`, y el comando de arranque debe invocar a Python para ejecutar `app.py`.
+- **El Porqué**: El entorno de ejecución cambia a Python (`python:3.9-alpine`). Como usamos la versión "Alpine" (súper ligera), carece de utilidades por defecto. Por ello, debemos usar el gestor `apk` para instalar dependencias del sistema (`gcc`, `postgresql-dev`, etc.) que `psycopg2` necesita estrictamente para poder compilarse. Luego, instalamos los requerimientos con `pip install` y eliminamos las dependencias residuales de sistema (`.build-deps`) para no engordar la imagen final. Finalmente, Flask expone el puerto `5000`, y el comando de arranque ejecuta `app.py`.
 
 ### Paso 5: Modificar la Orquestación en `docker-compose.yaml`
 Es vital adaptar el orquestador para que levante la nueva base de datos y la conecte a la nueva app.
