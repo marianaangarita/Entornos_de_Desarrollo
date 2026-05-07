@@ -1,17 +1,21 @@
-FROM node:18-alpine
+FROM python:3.9-alpine
 WORKDIR /app
 
-# Copiamos el package.json y package-lock.json (si existe)
-COPY package*.json ./
+# Copiamos las dependencias
+COPY requirements.txt ./
 
-# Instalamos las dependencias
-RUN npm install
+# Instalamos las dependencias de Python
+# Añadimos dependencias de sistema necesarias para psycopg2-binary
+RUN apk add --no-cache postgresql-libs && \
+    apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && \
+    pip install --no-cache-dir -r requirements.txt && \
+    apk --purge del .build-deps
 
 # Copiamos el resto de la aplicación
 COPY . .
 
-# Exponemos el puerto (ejemplo: 3000)
-EXPOSE 3000
+# Exponemos el puerto (ejemplo: 5000 para Flask)
+EXPOSE 5000
 
 # Comando para iniciar la aplicación
-CMD ["npm", "start"]
+CMD ["python", "app.py"]

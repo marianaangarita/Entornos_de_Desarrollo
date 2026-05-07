@@ -3,22 +3,23 @@ version: '3.8'
 services:
   DoD:
     build: .
-    image: it-crm:v0.1
+    image: it-crm-flask:v0.1
     container_name: DoD
     ports:
-      - "3000:3000"
+      - "5000:5000"
     networks:
       - DoD-CRM-NETWORK
     depends_on:
-      - mongodb
+      - postgres
 
-  mongodb:
-    image: mongo:latest
+  postgres:
+    image: postgres:15-alpine
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: DoD_CRM_DATABASE_25
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: DoD_CRM_DATABASE_25
+      POSTGRES_DB: admin
     volumes:
-      - mongodb_data:/data/db
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - DoD-CRM-NETWORK
 
@@ -27,4 +28,4 @@ networks:
     driver: bridge
 
 volumes:
-  mongodb_data:
+  postgres_data:
