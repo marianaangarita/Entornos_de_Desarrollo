@@ -46,30 +46,76 @@ Finalmente, para levantar simultáneamente tanto la aplicación como la base de 
 Con esta configuración, ejecutar `docker-compose up -d` descargará las imágenes, construirá la aplicación, configurará las redes y volúmenes, y dejará un entorno completo y funcional listo para ser utilizado.
 
 ---
-## Propuesta de Migración a Flask y PostgreSQL
+## Manual de Migración: De Node.js + MongoDB a Flask + PostgreSQL
 
-Si en el futuro se requiriera cambiar la tecnología de la aplicación a **Flask (Python)** y la base de datos a **PostgreSQL**, estos serían los pasos a seguir y sus razones:
+Si en el futuro se requiere cambiar la tecnología de la aplicación a **Flask (Python)** y la base de datos a **PostgreSQL**, este es el manual paso a paso a seguir para realizar la migración de forma exitosa.
 
-### 1. Actualizar las Dependencias (Python en lugar de Node.js)
-- **El Cómo**: Eliminar `package.json` y `package-lock.json`. En su lugar, crear un archivo `requirements.txt` que incluya dependencias como `Flask` y `psycopg2-binary` (o `SQLAlchemy` para ORM).
-- **El Porqué**: Flask es un microframework de Python, por lo que necesita el gestor de paquetes de Python (`pip`) para instalar sus bibliotecas. `psycopg2` es el adaptador más popular para conectar Python con PostgreSQL.
+### Paso 1: Eliminar archivos de Node.js
+Lo primero es limpiar el entorno de las dependencias antiguas de JavaScript.
 
-### 2. Reescribir la Aplicación (`app.py` en lugar de `index.js`)
-- **El Cómo**: Crear un archivo `app.py` con la lógica de inicialización del servidor de Flask (`app = Flask(__name__)`) y establecer la cadena de conexión a PostgreSQL, por ejemplo: `postgresql://usuario:contraseña@postgres:5432/miproyecto`.
-- **El Porqué**: La sintaxis y estructura de Express (Node.js) son exclusivas de JavaScript. Hay que reescribir las rutas en Python. La conexión usa el driver de PostgreSQL, que opera por el puerto estándar 5432 (a diferencia del 27017 de MongoDB).
+**Terminal:**
+```bash
+rm package.json package-lock.json index.js
+```
+- **El Porqué**: La aplicación dejará de estar basada en el ecosistema de JavaScript/Node.js, por lo que estos archivos ya no tienen utilidad y podrían causar conflictos o confusión en el proyecto.
 
-### 3. Modificar el `Dockerfile`
-- **El Cómo**: 
-  - Cambiar la imagen base a `FROM python:3.9-alpine` (u otra versión de Python).
-  - Cambiar el copiado de dependencias a `COPY requirements.txt ./` y el comando de instalación a `RUN pip install --no-cache-dir -r requirements.txt`.
-  - Cambiar el puerto expuesto al típico de Flask (`EXPOSE 5000`).
-  - Cambiar el comando de ejecución a `CMD ["python", "app.py"]` o mediante `gunicorn`.
-- **El Porqué**: El entorno de ejecución pasa de ser Node a Python, y la imagen base, el gestor de dependencias y los comandos de inicio deben reflejar este nuevo lenguaje.
+### Paso 2: Crear y definir las Dependencias de Python
+Ahora crearemos el archivo que Python utiliza para gestionar las librerías necesarias.
 
-### 4. Actualizar el `docker-compose.yaml`
-- **El Cómo**:
-  - Cambiar el servicio de base de datos de `mongodb` a `postgres`, usando la imagen oficial `postgres:latest` o `postgres:15-alpine`.
-  - Actualizar las variables de entorno para inicializar PostgreSQL (`POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`).
-  - Cambiar el mapeo del volumen interno a `/var/lib/postgresql/data` (la ruta donde PostgreSQL guarda sus datos).
-  - En el servicio de la app (`DoD`), actualizar `depends_on` para que espere al servicio `postgres` y modificar los puertos (`5000:5000`).
-- **El Porqué**: PostgreSQL requiere su propia imagen, variables de entorno específicas y una ruta de volumen distinta. El orquestador debe configurar la red para que Flask se conecte al nuevo contenedor de la base de datos relacional.
+**Terminal:**
+```bash
+echo "Flask==3.0.0" > requirements.txt
+echo "psycopg2-binary==2.9.9" >> requirements.txt
+```
+- **El Porqué**: Flask es el framework web en Python que reemplazará a Express. `psycopg2-binary` es el adaptador necesario para que Python pueda comunicarse de forma nativa y eficiente con la base de datos PostgreSQL.
+
+### Paso 3: Reescribir la Lógica de la Aplicación en Python
+Crearemos el nuevo archivo principal del servidor.
+
+**Terminal:**
+```bash
+touch app.py
+```
+*(Luego, abrir `app.py` en un editor y programar la lógica de Flask)*
+
+- **El Porqué**: Python usa una sintaxis completamente diferente a Node.js. En este archivo `app.py` se debe inicializar Flask (`app = Flask(__name__)`) y establecer la cadena de conexión a la nueva base de datos usando el puerto estándar de PostgreSQL, que es el `5432` (ej. `postgresql://root:DoD_CRM_DATABASE_25@postgres:5432/admin`).
+
+### Paso 4: Actualizar el entorno en el `Dockerfile`
+Debemos modificar las instrucciones de construcción del contenedor para que use Python.
+
+**Terminal (abrir Dockerfile y reemplazar su contenido):**
+```dockerfile
+FROM python:3.9-alpine
+WORKDIR /app
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+EXPOSE 5000
+CMD ["python", "app.py"]
+```
+- **El Porqué**: El entorno de ejecución cambia. Necesitamos una imagen base de Python (`python:3.9-alpine`). El comando para instalar librerías pasa a ser `pip install`. Por último, Flask expone tradicionalmente el puerto `5000`, y el comando de arranque debe invocar a Python para ejecutar `app.py`.
+
+### Paso 5: Modificar la Orquestación en `docker-compose.yaml`
+Es vital adaptar el orquestador para que levante la nueva base de datos y la conecte a la nueva app.
+
+**Terminal (ejemplo de configuración parcial a cambiar):**
+```yaml
+# En el servicio postgres (reemplaza a mongodb)
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: DoD_CRM_DATABASE_25
+      POSTGRES_DB: admin
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+```
+- **El Porqué**: PostgreSQL es un motor relacional completamente distinto a MongoDB. Requiere su propia imagen oficial de Docker, usa distintas variables de entorno para su configuración inicial y guarda sus datos en una ruta interna diferente. Actualizar el orquestador garantiza que se despliegue la base correcta y que la app Flask sepa conectarse a ella en la red (`DoD-CRM-NETWORK`).
+
+### Paso 6: Levantar el Nuevo Entorno
+Finalmente, se reconstruyen las imágenes y se levantan los servicios.
+
+**Terminal:**
+```bash
+docker-compose up -d --build
+```
+- **El Porqué**: El parámetro `--build` fuerza a Docker a ignorar la imagen de Node.js previamente construida en caché, forzando la lectura del nuevo `Dockerfile` para descargar Python, instalar los `requirements.txt` y levantar los contenedores con la nueva arquitectura migrada.
