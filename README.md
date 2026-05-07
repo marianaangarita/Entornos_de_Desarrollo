@@ -98,9 +98,23 @@ CMD ["python", "app.py"]
 ### Paso 5: Modificar la Orquestación en `docker-compose.yaml`
 Es vital adaptar el orquestador para que levante la nueva base de datos y la conecte a la nueva app.
 
-**Terminal (ejemplo de configuración parcial a cambiar):**
+**Archivo `docker-compose.yaml` (configuración final completa tras los cambios):**
 ```yaml
-# En el servicio postgres (reemplaza a mongodb)
+version: '3.8'
+
+services:
+  DoD:
+    build: .
+    image: it-crm-flask:v0.1
+    container_name: DoD
+    ports:
+      - "5000:5000"
+    networks:
+      - DoD-CRM-NETWORK
+    depends_on:
+      - postgres
+
+  postgres:
     image: postgres:15-alpine
     environment:
       POSTGRES_USER: root
@@ -108,6 +122,15 @@ Es vital adaptar el orquestador para que levante la nueva base de datos y la con
       POSTGRES_DB: admin
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - DoD-CRM-NETWORK
+
+networks:
+  DoD-CRM-NETWORK:
+    driver: bridge
+
+volumes:
+  postgres_data:
 ```
 - **El Porqué**: PostgreSQL es un motor relacional completamente distinto a MongoDB. Requiere su propia imagen oficial de Docker, usa distintas variables de entorno para su configuración inicial y guarda sus datos en una ruta interna diferente. Actualizar el orquestador garantiza que se despliegue la base correcta y que la app Flask sepa conectarse a ella en la red (`DoD-CRM-NETWORK`).
 
